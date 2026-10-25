@@ -1544,7 +1544,13 @@ module.exports = grammar({
     ),
 
     // Zsh parameter expansion flags: ${(L)var}, ${(j:,:)array}, etc.
-    expansion_flags: $ => token.immediate(/\([^)]+\)/),
+    //
+    // <<<claude>>> A flag argument may be delimited by any character, and
+    // when that character is '(' the matching ')' closes the argument, not
+    // the flag group -- `${(j(|))x}` joins on '|'. One level of nesting
+    // covers every form zsh accepts, since the argument cannot itself
+    // contain an unescaped delimiter.
+    expansion_flags: $ => token.immediate(/\((?:[^()]|\([^()]*\))*\)/),
 
     _expansion_body: $ => prec(1, choice(
      // HIGHEST PRIORITY: Colon operations (moved to top)

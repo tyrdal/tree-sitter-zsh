@@ -9162,7 +9162,7 @@
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\([^)]+\\)"
+        "value": "\\((?:[^()]|\\([^()]*\\))*\\)"
       }
     },
     "_expansion_body": {
