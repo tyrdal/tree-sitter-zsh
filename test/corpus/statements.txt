@@ -481,3 +481,61 @@ esac
         name: (command_name
           (word))
         argument: (word)))))
+
+================================================================================
+Case pattern with glob alternation group
+================================================================================
+
+case $OSTYPE in
+  (ex|im)port) echo matched ;;
+  (darwin|dragonfly|freebsd)*) echo bsd ;;
+esac
+
+--------------------------------------------------------------------------------
+
+(program
+  (case_statement
+    value: (variable_ref
+      (simple_variable_name))
+    (case_item
+      value: (extglob_pattern)
+      (command
+        name: (command_name
+          (word))
+        argument: (word)))
+    (case_item
+      value: (extglob_pattern)
+      (command
+        name: (command_name
+          (word))
+        argument: (word)))))
+
+================================================================================
+Case pattern with POSIX leading paren
+================================================================================
+
+case $x in
+  (foo) echo a ;;
+  (bar|baz) echo b ;;
+esac
+
+--------------------------------------------------------------------------------
+
+(program
+  (case_statement
+    value: (variable_ref
+      (simple_variable_name))
+    (case_item
+      value: (word)
+      (command
+        name: (command_name
+          (word))
+        argument: (word)))
+    (case_item
+      value: (extglob_pattern)
+      value: (extglob_pattern)
+      (command
+        name: (command_name
+          (word))
+        argument: (word)))))
+

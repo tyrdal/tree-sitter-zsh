@@ -333,6 +333,65 @@ static inline bool in_error_recovery(const bool *valid_symbols) {
     return valid_symbols[ERROR_RECOVERY];
 }
 
+// <<<claude>>> Is a case pattern that opens with '(' a glob group rather
+// than the optional POSIX case paren?
+//
+// `case x in (foo) echo a ;;` is the POSIX form: the paren opens the case
+// label and the ')' closes it, so the caller should emit OPENING_PAREN and
+// let the grammar take `optional('(')`. `case x in (ex|im)port) ...` is the
+// other reading: `(ex|im)port` is one glob pattern, and only the final ')'
+// closes the label. The two are told apart by the character right after the
+// ')' that balances the opening one -- whitespace means the label closed
+// there, anything else means the pattern carries on.
+//
+// Call with the opening '(' already consumed and marked as the token end.
+// Returning false leaves that mark untouched, so the caller can still emit
+// OPENING_PAREN; returning true has moved the mark to the end of the glob
+// pattern, stopping before the ')' or '|' the grammar needs to see.
+static bool scan_case_glob_group(TSLexer *lexer, bool *saw_pipe) {
+    uint32_t depth = 1;
+    while (depth > 0) {
+        // Whitespace inside the parens means this was never a glob group:
+        // `(a b)` is a case label holding words, not a pattern.
+        if (lexer->lookahead == '\0' || iswspace(lexer->lookahead)) {
+            return false;
+        }
+        if (lexer->lookahead == '(') {
+            depth++;
+        } else if (lexer->lookahead == ')') {
+            depth--;
+        }
+        advance(lexer);
+    }
+
+    if (lexer->lookahead == '\0' || iswspace(lexer->lookahead)) {
+        return false;
+    }
+
+    // The group was glob syntax, so keep going to whatever ends the pattern:
+    // the ')' closing the case label, or a '|' separating alternatives.
+    for (;;) {
+        if (lexer->lookahead == '\0' || iswspace(lexer->lookahead)) {
+            return false;
+        }
+        if (lexer->lookahead == '(') {
+            depth++;
+        } else if (lexer->lookahead == ')') {
+            if (depth == 0) {
+                break;
+            }
+            depth--;
+        } else if (lexer->lookahead == '|' && depth == 0) {
+            *saw_pipe = true;
+            break;
+        }
+        advance(lexer);
+    }
+
+    lexer->mark_end(lexer);
+    return true;
+}
+
 static inline void reset_string(String *string) {
     if (string->size > 0) {
         memset(string->contents, 0, string->size);
@@ -1215,6 +1274,19 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
                     // Reset and let other tokens handle it
                     return false;
                 }
+                // <<<claude>>> Before claiming this '(' opens a case
+                // label, check whether it opens a glob group that is part
+                // of the pattern. The '(' is consumed and marked, so a
+                // false answer costs nothing and OPENING_PAREN still wins.
+                if (valid_symbols[EXTGLOB_PATTERN] &&
+                    scan_case_glob_group(lexer,
+                                         &scanner->saw_pipe_in_case)) {
+                    was_just_bare_dollar = scanner->just_returned_bare_dollar =
+                        false;
+                    scanner->last_glob_paren_depth = 0;
+                    lexer->result_symbol = EXTGLOB_PATTERN;
+                    return true;
+                }
                 if (valid_symbols[OPENING_PAREN]) {
 #if DEBUG
                     fprintf(stderr, "SCANNER: Detected OPENING_PAREN NOT AFTER "
@@ -1222,7 +1294,10 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
 #endif
                     was_just_bare_dollar = scanner->just_returned_bare_dollar =
                         false; // Reset flag
-                    lexer->mark_end(lexer);
+                    // <<<claude>>> No mark_end here: it was set right after
+                    // the '(' was consumed, and the glob-group probe above
+                    // may have advanced well past it. Re-marking would hand
+                    // back a token spanning everything the probe looked at.
                     enter_context(scanner, CTX_COMMAND);
                     lexer->result_symbol = OPENING_PAREN;
                     return true;
