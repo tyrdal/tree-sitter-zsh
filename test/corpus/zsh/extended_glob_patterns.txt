@@ -1,6 +1,5 @@
 ================================================================================
-Extended glob - hash pattern with qualifiers [KNOWN FAIL: (#q..) after a word yields MISSING under tree-sitter test]
-:skip
+Extended glob - hash pattern with qualifiers
 ================================================================================
 
 echo file(#q.)
@@ -11,9 +10,9 @@ echo file(#q.)
   (command
     name: (command_name
       (word))
-    argument: (word)
     argument: (glob_pattern
-      flags: (zsh_extended_glob_flags))))
+      pattern: (word)
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Extended glob - tilde exclusion
@@ -127,8 +126,7 @@ echo (#b)(*).backup~$match[1]
       (word))))
 
 ================================================================================
-Extended glob - with regular qualifiers [KNOWN FAIL: (#q..) after a word yields MISSING under tree-sitter test]
-:skip
+Extended glob - with regular qualifiers
 ================================================================================
 
 echo *.txt(#qN.)
@@ -139,9 +137,8 @@ echo *.txt(#qN.)
   (command
     name: (command_name
       (word))
-    argument: (glob_pattern)
     argument: (glob_pattern
-      flags: (zsh_extended_glob_flags))))
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Extended glob - in test expressions
@@ -170,9 +167,10 @@ echo **/*(#qN.)~*test*
   (command
     name: (command_name
       (word))
-    argument: (glob_pattern)
-    argument: (glob_pattern
-      flags: (zsh_extended_glob_flags))))
+    argument: (concatenation
+      (glob_pattern
+        qualifier: (zsh_glob_qualifier))
+      (glob_pattern))))
 
 ================================================================================
 Extended glob - parenthesized alternatives

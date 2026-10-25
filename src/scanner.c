@@ -1244,6 +1244,25 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
                     valid_symbols[ZSH_EXTENDED_GLOB_FLAGS]) {
                     advance(lexer);
 
+                    // <<<claude>>> `(#q...)` with content is not a flags
+                    // group at all: the `q` is zsh's marker for a glob
+                    // *qualifier*, as in `*.c(#q.)`. Claiming it here left
+                    // the qualifier rule with nothing to match and the
+                    // glob_pattern with a MISSING pattern, so decline and
+                    // let zsh_glob_qualifier take it. A bare `(#q)`, with
+                    // nothing before the ')', has no qualifier for that rule
+                    // to match and really is a flags group, so it stays here.
+                    if (lexer->lookahead == 'q') {
+                        advance(lexer);
+                        if (lexer->lookahead != ')') {
+                            return false;
+                        }
+                        advance(lexer);
+                        lexer->mark_end(lexer);
+                        lexer->result_symbol = ZSH_EXTENDED_GLOB_FLAGS;
+                        return true;
+                    }
+
                     // Check for valid flag characters
                     bool found_flags = false;
                     while (
