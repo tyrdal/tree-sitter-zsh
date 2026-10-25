@@ -251,12 +251,15 @@ module.exports = grammar({
     )),
 
     // Zsh glob qualifiers: (.) (/) (*) etc.
-    // FIXME: these qualifiers need extending to deal with
-    //
+    // <<<claude>>> A qualifier group may end with history-style modifiers
+    // introduced by ':', as in *(N:t) or *(#q-.N:t). They are part of the
+    // same token rather than a separate zsh_glob_modifier, which is the rule
+    // for a group that is *only* modifiers, as in *(:t). Keeping them in one
+    // token is what stops the two rules being ambiguous for `(:t)`.
     zsh_glob_qualifier: $ => seq(
       '(', 
       optional(token.immediate('#q')),
-      token.immediate(/[./*@=p%\-^rwxugoaLkamcFNDMsShHbBfFdcaAtImCYoOnPqUGzZ+\d]+/),
+      token.immediate(/[./*@=p%\-^rwxugoaLkamcFNDMsShHbBfFdcaAtImCYoOnPqUGzZ+\d]+(\[[^\]]*\])?(:[a-zA-Z][^)]*)?/),
       ')',
     ),
 

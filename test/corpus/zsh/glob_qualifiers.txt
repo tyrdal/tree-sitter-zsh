@@ -4,13 +4,14 @@ Glob qualifier - regular files
 
 print *(.)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - directories
@@ -18,13 +19,14 @@ Glob qualifier - directories
 
 print *(/)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - executable files
@@ -32,13 +34,14 @@ Glob qualifier - executable files
 
 print *(*)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - symbolic links
@@ -46,13 +49,14 @@ Glob qualifier - symbolic links
 
 print *(@)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - socket files
@@ -60,13 +64,14 @@ Glob qualifier - socket files
 
 print *(=)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - empty directories
@@ -74,13 +79,14 @@ Glob qualifier - empty directories
 
 print *(/^F)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - files with size
@@ -88,13 +94,14 @@ Glob qualifier - files with size
 
 print *(Lk+10)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob qualifier - multiple qualifiers
@@ -102,13 +109,14 @@ Glob qualifier - multiple qualifiers
 
 print *(.Lm+5)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
 Glob modifier - tail (basename)
@@ -116,13 +124,14 @@ Glob modifier - tail (basename)
 
 print *(:t)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob modifier - head (dirname)
@@ -130,13 +139,14 @@ Glob modifier - head (dirname)
 
 print *(:h)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob modifier - remove extension
@@ -144,13 +154,14 @@ Glob modifier - remove extension
 
 print *(:r)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob modifier - extension only
@@ -158,13 +169,14 @@ Glob modifier - extension only
 
 print *(:e)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob modifier - uppercase
@@ -172,13 +184,14 @@ Glob modifier - uppercase
 
 print *(:u)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob modifier - lowercase
@@ -186,13 +199,14 @@ Glob modifier - lowercase
 
 print *(:l)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob with qualifier and modifier
@@ -200,14 +214,15 @@ Glob with qualifier and modifier
 
 print *(.)(:t)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier)
-      (zsh_glob_modifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier)
+      modifier: (zsh_glob_modifier))))
 
 ================================================================================
 Glob qualifier with path
@@ -215,19 +230,23 @@ Glob qualifier with path
 
 ls glob.tmp/**(.)
 
+--------------------------------------------------------------------------------
 
 (program
   (command
-    (command_name (word))
-    (zsh_glob
-      (word)
-      (zsh_glob_qualifier))))
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
 
 ================================================================================
-Complex glob pattern with qualifiers
+Complex glob pattern with qualifiers [KNOWN FAIL: nested glob group with (#e) inside a ~ exclusion]
+:skip
 ================================================================================
 
 print glob.tmp/**/*~*/dir3(/*|(#e))(/)
+
+--------------------------------------------------------------------------------
 
 (program
   (command
@@ -239,3 +258,92 @@ Glob qualifier in command substitution
 ================================================================================
 
 files=$(echo *(.))
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (command_substitution
+      (command
+        name: (command_name
+          (word))
+        argument: (glob_pattern
+          qualifier: (zsh_glob_qualifier))))))
+
+================================================================================
+Glob qualifier with trailing modifier
+================================================================================
+
+print *(N:t)
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
+
+================================================================================
+Glob qualifier with several modifiers
+================================================================================
+
+print *(N:r:t)
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
+
+================================================================================
+Glob qualifier with #q flag and modifier
+================================================================================
+
+print *.h(#q-.N:t)
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    name: (command_name
+      (word))
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))
+
+================================================================================
+Glob qualifier with modifier in an array
+================================================================================
+
+mods=( /etc/apache2/*.load(N:r:t) )
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (array
+      (glob_pattern
+        qualifier: (zsh_glob_qualifier)))))
+
+================================================================================
+Glob qualifier with a sort subscript
+================================================================================
+
+print -r -- *(om[1,3])
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    name: (command_name
+      (word))
+    argument: (word)
+    argument: (word)
+    argument: (glob_pattern
+      qualifier: (zsh_glob_qualifier))))

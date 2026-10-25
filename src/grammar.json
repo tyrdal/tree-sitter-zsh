@@ -113,7 +113,7 @@
           "type": "IMMEDIATE_TOKEN",
           "content": {
             "type": "PATTERN",
-            "value": "[./*@=p%\\-^rwxugoaLkamcFNDMsShHbBfFdcaAtImCYoOnPqUGzZ+\\d]+"
+            "value": "[./*@=p%\\-^rwxugoaLkamcFNDMsShHbBfFdcaAtImCYoOnPqUGzZ+\\d]+(\\[[^\\]]*\\])?(:[a-zA-Z][^)]*)?"
           }
         },
         {
