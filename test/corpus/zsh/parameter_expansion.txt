@@ -210,3 +210,36 @@ x=${(j(|))y}
     value: (expansion
       flags: (expansion_flags)
       name: (simple_variable_name))))
+
+================================================================================
+Substitution replacement holding a close paren
+================================================================================
+
+x=${v/a/)}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      (expansion_pattern
+        name: (simple_variable_name)
+        pattern: (regex)
+        replacement: (word)))))
+
+================================================================================
+Substitution replacement holding an arithmetic base [KNOWN FAIL: terminates now, still parses with errors]
+:skip
+================================================================================
+
+x=${v//a/$(( [##16] ))}
+
+--------------------------------------------------------------------------------
+
+(ERROR
+  (variable_name)
+  (simple_variable_name)
+  (regex)
+  (number))
+/tmp/claude-1001/-home-tyrdal-projects-shellsmith/36f64d93-8b08-447b-8bbc-c5021b251475/scratchpad/rt.zsh	Parse:    0.12 ms	   199 bytes/ms	(ERROR)

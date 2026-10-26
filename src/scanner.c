@@ -2208,6 +2208,19 @@ regex:
 #endif
                 return false;
             }
+            // <<<claude>>> The same guard for REGEX_NO_SLASH, which was the
+            // one symbol here without it. Returning true having consumed
+            // nothing hands the parser a zero-width token, so it shifts and
+            // reduces forever without advancing: `${v/a/)}` allocated until
+            // the process died, about 7 seconds and 4 GB. The debug log
+            // shows the loop as `lexed_lookahead sym:regex, size:0`.
+            if (valid_symbols[REGEX_NO_SLASH] && !state.advanced_once) {
+
+#if DEBUG
+                fprintf(stderr, "DEBUG: regex not valid returning false\n");
+#endif
+                return false;
+            }
 
 #if DEBUG
             fprintf(stderr, "DEBUG: regex scan returning regex\n");
