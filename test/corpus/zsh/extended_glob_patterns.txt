@@ -230,3 +230,64 @@ Extended glob - negation in test
         (simple_variable_name))
       right: (glob_pattern
         qualifier: (zsh_glob_qualifier)))))
+
+================================================================================
+Glob alternation with an empty trailing branch [KNOWN FAIL: still yields a MISSING node; the token change was not enough]
+:skip
+================================================================================
+
+[[ $x = (a|) ]]
+
+--------------------------------------------------------------------------------
+
+(program
+  (test_command
+    (binary_expression
+      left: (variable_ref
+        (simple_variable_name))
+      right: (parenthesized_expression
+        (binary_expression
+          left: (word)
+          right: (word))))))
+
+================================================================================
+Glob alternation with several branches, last empty [KNOWN FAIL: still yields a MISSING node; the token change was not enough]
+:skip
+================================================================================
+
+[[ $x = (.|..|)/* ]]
+
+--------------------------------------------------------------------------------
+
+(program
+  (test_command
+    (binary_expression
+      left: (variable_ref
+        (simple_variable_name))
+      right: (binary_expression
+        left: (parenthesized_expression
+          (binary_expression
+            left: (binary_expression
+              left: (word)
+              right: (word))
+            right: (word)))
+        right: (glob_pattern)))))
+
+================================================================================
+Glob alternation with an empty leading branch [KNOWN FAIL: ( is claimed as OPENING_PAREN before the glob token]
+:skip
+================================================================================
+
+[[ $x = (|b) ]]
+
+--------------------------------------------------------------------------------
+
+(program
+  (test_command
+    (binary_expression
+      left: (variable_ref
+        (simple_variable_name))
+      right: (parenthesized_expression
+        (ERROR)
+        (word)))))
+/tmp/claude-1001/-home-tyrdal-projects-shellsmith/0574a61a-8de0-4543-bfda-b720ce1905a5/scratchpad/rt.zsh	Parse:    0.07 ms	   227 bytes/ms	(ERROR)

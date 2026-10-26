@@ -1122,7 +1122,7 @@ module.exports = grammar({
           /\[[!^]?[^\]]*\]/,                        // [...]
           /<[0-9]*-[0-9]*>/,                        // <1-10> <-> <20-> <-5>
           /\{[^}]*,[^}]*\}/,                        // {a,b}
-          /\([^)|]+(\|[^)|]*)+\)/                   // (a|b|c)
+          /\([^)|]*(\|[^)|]*)+\)/                   // (a|b|c)
         ),
         repeat(choice(
           /[^\s'"*?\[{()}<=\];]/,                 // regular chars excluding delimiters and backslash (allow ) for filenames)
@@ -1134,7 +1134,7 @@ module.exports = grammar({
           /<[0-9]*-[0-9]*>/,                        // <1-10> <-> <20-> <-5>
           /\{[^}]+,[^}]*\}/,                        // {a,b}
           /~/,                                      // ~ (allowed after initial char)
-          /\([^)|]+(\|[^)|]*)+\)/                   // (a|b|c)
+          /\([^)|]*(\|[^)|]*)+\)/                   // (a|b|c)
         ))
       ),
       // Pattern with regular chars containing at least one glob metacharacter
@@ -1150,7 +1150,7 @@ module.exports = grammar({
           /\[[!^]?[^\]]*\]/,                        // [...]
           /<[0-9]*-[0-9]*>/,                        // <1-10> <-> <20-> <-5>
           /\{[^}]*,[^}]*\}/,                        // {a,b}
-          /\([^)|]+(\|[^)|]*)+\)/                   // (a|b|c)
+          /\([^)|]*(\|[^)|]*)+\)/                   // (a|b|c)
         ),
         repeat(choice(
           /[^\s'"*?\[{()}<=\];]/,                 // regular chars excluding delimiters and backslash (allow ) for filenames)
@@ -1162,7 +1162,7 @@ module.exports = grammar({
           /<[0-9]*-[0-9]*>/,                        // <1-10> <-> <20-> <-5>
           /\{[^}]+,[^}]*\}/,                        // {a,b}
           /~/,                                      // ~ (allowed after initial char)
-          /\([^)|]+(\|[^)|]*)+\)/                   // (a|b|c)
+          /\([^)|]*(\|[^)|]*)+\)/                   // (a|b|c)
         ))
       )
     )),
