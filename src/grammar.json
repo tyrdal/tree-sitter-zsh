@@ -3229,42 +3229,60 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "FIELD",
-                "name": "flags",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "zsh_array_subscript_flags"
-                }
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "flags",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "zsh_array_subscript_flags"
+                    }
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "FIELD",
+                        "name": "index",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "zsh_subscript_pattern"
+                        }
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                "type": "BLANK"
+                "type": "FIELD",
+                "name": "index",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "_param_arithmetic_expression"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "array_star"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "array_at"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "string"
+                    }
+                  ]
+                }
               }
             ]
-          },
-          {
-            "type": "FIELD",
-            "name": "index",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "_param_arithmetic_expression"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "array_star"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "array_at"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "string"
-                }
-              ]
-            }
           },
           {
             "type": "STRING",
@@ -4153,6 +4171,13 @@
     "array_at": {
       "type": "SYMBOL",
       "name": "_array_at_token"
+    },
+    "zsh_subscript_pattern": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "(?:[^\\]\\[]|\\[[^\\]]*\\])+"
+      }
     },
     "zsh_array_subscript_flags": {
       "type": "SEQ",
@@ -7768,38 +7793,56 @@
                     "type": "CHOICE",
                     "members": [
                       {
-                        "type": "FIELD",
-                        "name": "flags",
-                        "content": {
-                          "type": "SYMBOL",
-                          "name": "zsh_array_subscript_flags"
-                        }
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "FIELD",
+                            "name": "flags",
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "zsh_array_subscript_flags"
+                            }
+                          },
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "FIELD",
+                                "name": "index",
+                                "content": {
+                                  "type": "SYMBOL",
+                                  "name": "zsh_subscript_pattern"
+                                }
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
-                        "type": "BLANK"
+                        "type": "FIELD",
+                        "name": "index",
+                        "content": {
+                          "type": "CHOICE",
+                          "members": [
+                            {
+                              "type": "SYMBOL",
+                              "name": "_param_arithmetic_expression"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "array_star"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "array_at"
+                            }
+                          ]
+                        }
                       }
                     ]
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "index",
-                    "content": {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "_param_arithmetic_expression"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "array_star"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "array_at"
-                        }
-                      ]
-                    }
                   },
                   {
                     "type": "STRING",
@@ -7900,38 +7943,56 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "FIELD",
-                      "name": "flags",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "zsh_array_subscript_flags"
-                      }
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "flags",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "zsh_array_subscript_flags"
+                          }
+                        },
+                        {
+                          "type": "CHOICE",
+                          "members": [
+                            {
+                              "type": "FIELD",
+                              "name": "index",
+                              "content": {
+                                "type": "SYMBOL",
+                                "name": "zsh_subscript_pattern"
+                              }
+                            },
+                            {
+                              "type": "BLANK"
+                            }
+                          ]
+                        }
+                      ]
                     },
                     {
-                      "type": "BLANK"
+                      "type": "FIELD",
+                      "name": "index",
+                      "content": {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SYMBOL",
+                            "name": "_param_arithmetic_expression"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "array_star"
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "array_at"
+                          }
+                        ]
+                      }
                     }
                   ]
-                },
-                {
-                  "type": "FIELD",
-                  "name": "index",
-                  "content": {
-                    "type": "CHOICE",
-                    "members": [
-                      {
-                        "type": "SYMBOL",
-                        "name": "_param_arithmetic_expression"
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "array_star"
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "array_at"
-                      }
-                    ]
-                  }
                 },
                 {
                   "type": "STRING",
@@ -9543,38 +9604,56 @@
                     "type": "CHOICE",
                     "members": [
                       {
-                        "type": "FIELD",
-                        "name": "flags",
-                        "content": {
-                          "type": "SYMBOL",
-                          "name": "zsh_array_subscript_flags"
-                        }
+                        "type": "SEQ",
+                        "members": [
+                          {
+                            "type": "FIELD",
+                            "name": "flags",
+                            "content": {
+                              "type": "SYMBOL",
+                              "name": "zsh_array_subscript_flags"
+                            }
+                          },
+                          {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "FIELD",
+                                "name": "index",
+                                "content": {
+                                  "type": "SYMBOL",
+                                  "name": "zsh_subscript_pattern"
+                                }
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
+                          }
+                        ]
                       },
                       {
-                        "type": "BLANK"
+                        "type": "FIELD",
+                        "name": "index",
+                        "content": {
+                          "type": "CHOICE",
+                          "members": [
+                            {
+                              "type": "SYMBOL",
+                              "name": "_param_arithmetic_expression"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "array_star"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "array_at"
+                            }
+                          ]
+                        }
                       }
                     ]
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "index",
-                    "content": {
-                      "type": "CHOICE",
-                      "members": [
-                        {
-                          "type": "SYMBOL",
-                          "name": "_param_arithmetic_expression"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "array_star"
-                        },
-                        {
-                          "type": "SYMBOL",
-                          "name": "array_at"
-                        }
-                      ]
-                    }
                   },
                   {
                     "type": "STRING",

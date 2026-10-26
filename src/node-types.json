@@ -1497,6 +1497,10 @@
           {
             "type": "word",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -1638,6 +1642,10 @@
           },
           {
             "type": "zsh_array_subscript_flags",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -1787,6 +1795,10 @@
           {
             "type": "word",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -1928,6 +1940,10 @@
           },
           {
             "type": "zsh_array_subscript_flags",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -2037,6 +2053,10 @@
           {
             "type": "word",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -2178,6 +2198,10 @@
           },
           {
             "type": "zsh_array_subscript_flags",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -2410,6 +2434,10 @@
           {
             "type": "word",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -2551,6 +2579,10 @@
           },
           {
             "type": "zsh_array_subscript_flags",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -2763,6 +2795,10 @@
           {
             "type": "word",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -2939,6 +2975,10 @@
           {
             "type": "zsh_array_subscript_flags",
             "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
+            "named": true
           }
         ]
       },
@@ -3070,6 +3110,10 @@
           },
           {
             "type": "word",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -3222,6 +3266,10 @@
           },
           {
             "type": "zsh_array_subscript_flags",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -4063,7 +4111,7 @@
       },
       "index": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "arithmetic_expansion",
@@ -4139,6 +4187,10 @@
           },
           {
             "type": "word",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -4730,6 +4782,10 @@
           },
           {
             "type": "word",
+            "named": true
+          },
+          {
+            "type": "zsh_subscript_pattern",
             "named": true
           }
         ]
@@ -5405,6 +5461,10 @@
   {
     "type": "while",
     "named": false
+  },
+  {
+    "type": "zsh_subscript_pattern",
+    "named": true
   },
   {
     "type": "{",

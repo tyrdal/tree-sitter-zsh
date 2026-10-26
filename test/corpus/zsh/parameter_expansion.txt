@@ -225,3 +225,90 @@ x=${v//a/$(( [##16] ))}
   (regex)
   (number))
 /tmp/claude-1001/-home-tyrdal-projects-shellsmith/36f64d93-8b08-447b-8bbc-c5021b251475/scratchpad/rt.zsh	Parse:    0.12 ms	   199 bytes/ms	(ERROR)
+
+================================================================================
+Subscript search flag with a spaced pattern
+================================================================================
+
+x=${d[(r)Known Variables*]}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      name: (simple_variable_name)
+      flags: (zsh_array_subscript_flags)
+      index: (zsh_subscript_pattern))))
+
+================================================================================
+Subscript search flag with a bracket class
+================================================================================
+
+x=${d[(r)Known [Ee]nc*]}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      name: (simple_variable_name)
+      flags: (zsh_array_subscript_flags)
+      index: (zsh_subscript_pattern))))
+
+================================================================================
+Subscript search flag with an alternation
+================================================================================
+
+x=${w[(I)--(con|)cat]}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      name: (simple_variable_name)
+      flags: (zsh_array_subscript_flags)
+      index: (zsh_subscript_pattern))))
+
+================================================================================
+Subscript search flag with an empty pattern
+================================================================================
+
+x=${r[(r)]}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      name: (simple_variable_name)
+      flags: (zsh_array_subscript_flags))))
+
+================================================================================
+Subscript flag with a delimited argument [KNOWN FAIL: the flags rule forces ':' as the delimiter]
+:skip
+================================================================================
+
+x=${a[(ws:,:)2]}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      name: (simple_variable_name)
+      index: (parenthesized_expression
+        (concatenation
+          (word)
+          (word)
+          (word)
+          (word)))
+      (ERROR
+        (number)))))
+/tmp/claude-1001/-home-tyrdal-projects-shellsmith/0574a61a-8de0-4543-bfda-b720ce1905a5/scratchpad/rt.zsh	Parse:    0.08 ms	   208 bytes/ms	(ERROR)

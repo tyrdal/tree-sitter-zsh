@@ -384,14 +384,14 @@ unset "${(@k)parameters[(I)_dotfiler_plan_*]}"
       (expansion
         name: (simple_variable_name)
         flags: (zsh_array_subscript_flags)
-        index: (glob_pattern))))
+        index: (zsh_subscript_pattern))))
   (unset_command
     (string
       (expansion
         flags: (expansion_flags)
         name: (simple_variable_name)
         flags: (zsh_array_subscript_flags)
-        index: (glob_pattern)))))
+        index: (zsh_subscript_pattern)))))
 
 ================================================================================
 Parameter expansion - default with digit-led value (not substring)

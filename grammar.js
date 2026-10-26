@@ -778,8 +778,11 @@ module.exports = grammar({
     subscript: $ => prec.left(seq(
       field('name', $.variable_name),
       '[',
-      optional(field('flags', $.zsh_array_subscript_flags)),
-      field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at, $.string)),
+      choice(
+        seq(field('flags', $.zsh_array_subscript_flags),
+            optional(field('index', $.zsh_subscript_pattern))),
+        field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at, $.string)),
+      ),
       ']',
     )),
 
@@ -852,6 +855,14 @@ module.exports = grammar({
     // Array expansion operators: [*] and [@]
     array_star: $ => $._array_star_token,
     array_at: $ => $._array_at_token,
+
+    // <<<claude>>> After a search flag such as (r) or (i), the subscript
+    // index is a *pattern*, not an arithmetic expression: `${d[(r)Known
+    // Variables*]}` and `${w[(I)--(con|)cat]}` are both ordinary zsh. Parsed
+    // as arithmetic they fail on the space, on the alternation group, and on
+    // nested brackets. One token up to the matching ']' covers all of them,
+    // and the inner alternative lets a bracket class through.
+    zsh_subscript_pattern: $ => token(/(?:[^\]\[]|\[[^\]]*\])+/),
 
     // Zsh array subscript flags: (i) (I) (r) (R) etc.
     // FIXME: delimeter is forced as :, could be any
@@ -1368,8 +1379,11 @@ module.exports = grammar({
       ),
       optional(seq(
         '[',
-        optional(field('flags', $.zsh_array_subscript_flags)),
-        field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        choice(
+          seq(field('flags', $.zsh_array_subscript_flags),
+              optional(field('index', $.zsh_subscript_pattern))),
+          field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        ),
         ']'
       )),
       optional(field('modifier', $.expansion_modifier))
@@ -1393,8 +1407,11 @@ module.exports = grammar({
       ),
       optional(seq(  // Postfix subscript operator (left-associating)
         '[',
-        optional(field('flags', $.zsh_array_subscript_flags)),
-        field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        choice(
+          seq(field('flags', $.zsh_array_subscript_flags),
+              optional(field('index', $.zsh_subscript_pattern))),
+          field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        ),
         ']'
       ))
     ),
@@ -1639,8 +1656,11 @@ module.exports = grammar({
       ),
       optional(seq(
         '[',
-        optional(field('flags', $.zsh_array_subscript_flags)),
-        field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        choice(
+          seq(field('flags', $.zsh_array_subscript_flags),
+              optional(field('index', $.zsh_subscript_pattern))),
+          field('index', choice($._param_arithmetic_expression, $.array_star, $.array_at)),
+        ),
         ']'
       )),
     )),
