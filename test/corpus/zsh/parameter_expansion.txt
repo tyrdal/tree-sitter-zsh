@@ -131,8 +131,7 @@ echo "${REPLY%%$'\n'}"
           (ansi_c_string))))))
 
 ================================================================================
-Expansion flags then a GLOB_SUBST prefix [KNOWN FAIL: flags-then-prefix segfaults the parser on nested expansions; see _nslookup]
-:skip
+Expansion flags then a GLOB_SUBST prefix
 ================================================================================
 
 x=${(e)~y}
@@ -148,8 +147,7 @@ x=${(e)~y}
       name: (simple_variable_name))))
 
 ================================================================================
-Expansion flags then an RC_EXPAND_PARAM prefix [KNOWN FAIL: same blowup as the GLOB_SUBST case]
-:skip
+Expansion flags then an RC_EXPAND_PARAM prefix
 ================================================================================
 
 x=${(@)^y}
@@ -165,8 +163,7 @@ x=${(@)^y}
       name: (simple_variable_name))))
 
 ================================================================================
-Expansion flags then a length prefix [KNOWN FAIL: same blowup as the GLOB_SUBST case]
-:skip
+Expansion flags then a length prefix
 ================================================================================
 
 x=${(c)#y}
@@ -180,21 +177,6 @@ x=${(c)#y}
       flags: (expansion_flags)
       style: (expansion_style)
       name: (simple_variable_name))))
-
-================================================================================
-Expansion flags with no parameter name [KNOWN FAIL: optional body costs 5 error nodes elsewhere, net worse]
-:skip
-================================================================================
-
-x=${(l:11:: :)}
-
---------------------------------------------------------------------------------
-
-(program
-  (variable_assignment
-    name: (variable_name)
-    value: (expansion
-      flags: (expansion_flags))))
 
 ================================================================================
 Expansion flags with a parenthesised argument

@@ -1534,10 +1534,14 @@ module.exports = grammar({
     expansion: $ => seq(
       prec(2, alias(seq($._bare_dollar, $._brace_start), "${")),
       choice(
-        prec.right(10, seq(field('style', $.expansion_style), 
-             field('flags', $.expansion_flags), $._expansion_body)),
-        prec.right(10, seq(field('style', $.expansion_style), $._expansion_body)),
-        prec.left(10, seq(field('flags', $.expansion_flags), $._expansion_body)),
+        // <<<claude>>> One branch per leading token, so the first symbol
+        // settles which applies. zsh takes the prefix on either side of the
+        // flag group: `${(e)~x}` is flags then GLOB_SUBST, and only the
+        // other order parsed before.
+        prec.right(10, seq(field('style', $.expansion_style),
+             optional(field('flags', $.expansion_flags)), $._expansion_body)),
+        prec.right(10, seq(field('flags', $.expansion_flags),
+             optional(field('style', $.expansion_style)), $._expansion_body)),
         prec.left($._expansion_body),
       ),
       '}',

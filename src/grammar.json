@@ -9086,12 +9086,20 @@
                     }
                   },
                   {
-                    "type": "FIELD",
-                    "name": "flags",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "expansion_flags"
-                    }
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "FIELD",
+                        "name": "flags",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "expansion_flags"
+                        }
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
                   },
                   {
                     "type": "SYMBOL",
@@ -9108,32 +9116,27 @@
                 "members": [
                   {
                     "type": "FIELD",
-                    "name": "style",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "expansion_style"
-                    }
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_expansion_body"
-                  }
-                ]
-              }
-            },
-            {
-              "type": "PREC_LEFT",
-              "value": 10,
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "FIELD",
                     "name": "flags",
                     "content": {
                       "type": "SYMBOL",
                       "name": "expansion_flags"
                     }
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "FIELD",
+                        "name": "style",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "expansion_style"
+                        }
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
                   },
                   {
                     "type": "SYMBOL",
