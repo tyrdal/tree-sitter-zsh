@@ -434,15 +434,29 @@ static unsigned serialize(Scanner *scanner, char *buffer) {
     buffer[size++] = (char)scanner->last_glob_paren_depth;
     buffer[size++] = (char)scanner->ext_was_in_double_quote;
     buffer[size++] = (char)scanner->ext_saw_outside_quote;
-    buffer[size++] = (char)scanner->context_stack.size;
-    buffer[size++] = (char)scanner->heredocs.size;
+    // <<<claude>>> These counts are one byte each, so a stack deeper than
+    // 255 used to be recorded modulo 256 while every entry was still
+    // written. deserialize then read back fewer entries than serialize had
+    // produced and tripped `assert(size == length)`, aborting the process on
+    // Completion/Unix/Command/_git. Clamp instead: losing context past 255
+    // degrades a pathological file, crashing loses the session.
+    uint32_t ctx_count = scanner->context_stack.size;
+    if (ctx_count > UINT8_MAX) {
+        ctx_count = UINT8_MAX;
+    }
+    uint32_t heredoc_count_out = scanner->heredocs.size;
+    if (heredoc_count_out > UINT8_MAX) {
+        heredoc_count_out = UINT8_MAX;
+    }
+    buffer[size++] = (char)ctx_count;
+    buffer[size++] = (char)heredoc_count_out;
     buffer[size++] = (char)scanner->just_returned_variable_name;
     buffer[size++] = (char)scanner->just_returned_bare_dollar;
     buffer[size++] = (char)scanner->just_exited_string;
     buffer[size++] = (char)scanner->just_newline;
 
     // Serialize context stack
-    for (uint32_t i = 0; i < scanner->context_stack.size; i++) {
+    for (uint32_t i = 0; i < ctx_count; i++) {
         if (size >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE) {
             return 0;
         }
@@ -450,7 +464,7 @@ static unsigned serialize(Scanner *scanner, char *buffer) {
         buffer[size++] = (char)*ctx;
     }
 
-    for (uint32_t i = 0; i < scanner->heredocs.size; i++) {
+    for (uint32_t i = 0; i < heredoc_count_out; i++) {
         Heredoc *heredoc = array_get(&scanner->heredocs, i);
         if (size + 3 + sizeof(uint32_t) + heredoc->delimiter.size >=
             TREE_SITTER_SERIALIZATION_BUFFER_SIZE) {
