@@ -152,3 +152,70 @@ echo $(( abs(-5) ))
         name: (word)
         argument: (unary_expression
           (number))))))
+
+================================================================================
+Arithmetic with the comma operator
+================================================================================
+
+(( a=1, b=2 ))
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    name: (command_name
+      (arithmetic_expansion
+        (binary_expression
+          left: (word)
+          right: (number))
+        (binary_expression
+          left: (word)
+          right: (number))))))
+
+================================================================================
+Arithmetic comma inside an expansion
+================================================================================
+
+x=$(( 1, 2 ))
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (arithmetic_expansion
+      (number)
+      (number))))
+
+================================================================================
+Arithmetic with a subscripted operand [KNOWN FAIL: still one error node; the scanner declines so the subscript is not made worse, but the form does not parse clean]
+:skip
+================================================================================
+
+(( part > min_ver[min_cnt] ))
+
+--------------------------------------------------------------------------------
+
+(program
+  (test_command
+    (ERROR
+      (word))
+    (glob_pattern)))
+/tmp/claude-1001/-home-tyrdal-projects-shellsmith/0574a61a-8de0-4543-bfda-b720ce1905a5/scratchpad/rt.zsh	Parse:    0.08 ms	   381 bytes/ms	(ERROR)
+
+================================================================================
+Arithmetic mixing a call and a comma
+================================================================================
+
+x=$(( sqrt(n), 2 ))
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (arithmetic_expansion
+      (arithmetic_call
+        name: (word)
+        argument: (word))
+      (number))))

@@ -216,6 +216,8 @@ module.exports = grammar({
     '"',
     '\'',
     '`',
+    $._arith_word,
+    $._arith_number,
     $.__error_recovery,
   ],
 
@@ -1241,7 +1243,12 @@ module.exports = grammar({
       $.expansion,
       $.variable_name,
       $.string,
-      $._word_or_word_with_colon  // Allow bare identifiers in arithmetic context (e.g., 'start' in $((start)))
+      // <<<claude>>> An external token, not the general `word`. See B42:
+      // `word` treats ',' '=' '+' as ordinary characters, so `a=1,` lexed
+      // as one word and no operator was produced. Only the scanner, which
+      // is consulted before the internal lexer, can win that conflict.
+      alias($._arith_word, $.word),
+      alias($._arith_number, $.number),
     )),
 
     _arithmetic_binary_expression: $ => createBinaryExpression(
@@ -1286,7 +1293,10 @@ module.exports = grammar({
 
     // Function call in arithmetic context: sqrt(x), sin(a), abs(n), etc.
     arithmetic_call: $ => prec(2, seq(
-      field('name', $.word),
+      // <<<claude>>> The external arithmetic token, for the same reason as
+      // _arithmetic_literal: inside (( )) the scanner produces it, not the
+      // general `word`, so naming `word` here left `sqrt(x)` unparsable.
+      field('name', alias($._arith_word, $.word)),
       token.immediate('('),
       optional(seq(
         field('argument', $._arithmetic_expression),

@@ -6523,8 +6523,22 @@
             "name": "string"
           },
           {
-            "type": "SYMBOL",
-            "name": "_word_or_word_with_colon"
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_arith_word"
+            },
+            "named": true,
+            "value": "word"
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_arith_number"
+            },
+            "named": true,
+            "value": "number"
           }
         ]
       }
@@ -7297,8 +7311,13 @@
             "type": "FIELD",
             "name": "name",
             "content": {
-              "type": "SYMBOL",
-              "name": "word"
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_arith_word"
+              },
+              "named": true,
+              "value": "word"
             }
           },
           {
@@ -12674,6 +12693,14 @@
     {
       "type": "STRING",
       "value": "`"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_arith_word"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_arith_number"
     },
     {
       "type": "SYMBOL",

@@ -62,6 +62,8 @@ enum TokenType {
     DOUBLE_QUOTE,
     SINGLE_QUOTE,
     BACKTICK,
+    ARITH_WORD,
+    ARITH_NUMBER,
     ERROR_RECOVERY,
 };
 
@@ -118,6 +120,8 @@ const char *TokenNames[] = {
     "DOUBLE_QUOTE",
     "SINGLE_QUOTE",
     "BACKTICK",
+    "ARITH_WORD",
+    "ARITH_NUMBER",
     "ERROR_RECOVERY",
 };
 #endif
@@ -761,6 +765,42 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
         }
     }
 #endif
+
+    // <<<claude>>> An identifier inside `(( ))`. The grammar used its
+    // general `word` token here, and SPECIAL_CHARACTERS holds no ',' '='
+    // '+' '-', so `a=1,` lexed as one word and no operator was ever
+    // produced -- B42. An internal token cannot win that conflict because
+    // the lexer prefers the longer match; an external one is consulted
+    // first, which is the whole point of doing this here.
+    if ((valid_symbols[ARITH_WORD] || valid_symbols[ARITH_NUMBER]) &&
+        !in_error_recovery(valid_symbols)) {
+        while (iswspace(lexer->lookahead) && lexer->lookahead != '\n') {
+            skip(lexer);
+        }
+        // Digits too, not just identifiers: `1,` would otherwise fall
+        // through to the general word token and take the comma with it.
+        // Which symbol it is depends on what was consumed, so a numeric
+        // literal stays a number rather than becoming an opaque word --
+        // semantic tokens will want that distinction.
+        if (iswalnum(lexer->lookahead) || lexer->lookahead == '_') {
+            bool all_digits = true;
+            while (iswalnum(lexer->lookahead) || lexer->lookahead == '_') {
+                if (!iswdigit(lexer->lookahead)) {
+                    all_digits = false;
+                }
+                advance(lexer);
+            }
+            // A subscript follows its name directly, and `subscript`
+            // wants the VARIABLE_NAME token, not this one. Decline so
+            // `(( part > min_ver[min_cnt] ))` still resolves.
+            if (lexer->lookahead == '[') {
+                return false;
+            }
+            lexer->mark_end(lexer);
+            lexer->result_symbol = all_digits ? ARITH_NUMBER : ARITH_WORD;
+            return valid_symbols[lexer->result_symbol];
+        }
+    }
 
     // Clear flag at start and capture its previous value
     bool was_just_variable_name = scanner->just_returned_variable_name;
