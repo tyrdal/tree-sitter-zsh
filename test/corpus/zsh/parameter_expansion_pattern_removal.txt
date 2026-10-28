@@ -92,3 +92,69 @@ echo "${arr[@]:# }"
           name: (simple_variable_name)
           index: (array_at)
           pattern: (word))))))
+
+================================================================================
+Pattern removal with an empty pattern
+================================================================================
+
+x=${m:#}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      (expansion_pattern
+        name: (simple_variable_name)))))
+
+================================================================================
+Suffix removal with an empty pattern
+================================================================================
+
+x=${m%%}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      (expansion_pattern
+        name: (simple_variable_name)))))
+
+================================================================================
+Empty pattern under expansion flags
+================================================================================
+
+x=${(@)m:#}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      flags: (expansion_flags)
+      (expansion_pattern
+        name: (simple_variable_name)))))
+
+================================================================================
+Empty pattern in a nested expansion
+================================================================================
+
+x=${(@)${(@M)m:#a}:#}
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignment
+    name: (variable_name)
+    value: (expansion
+      flags: (expansion_flags)
+      (expansion_pattern
+        name: (expansion
+          flags: (expansion_flags)
+          (expansion_pattern
+            name: (simple_variable_name)
+            pattern: (regex)))))))

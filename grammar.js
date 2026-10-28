@@ -218,6 +218,7 @@ module.exports = grammar({
     '`',
     $._arith_word,
     $._arith_number,
+    $._empty_pattern_suffix,
     $.__error_recovery,
   ],
 
@@ -1460,17 +1461,21 @@ module.exports = grammar({
     )),
 
     // Visible rule for parameter expansion patterns 
+    // <<<claude>>> The pattern is optional: `${m:#}`, `${m%%}` and `${m#}`
+    // are all valid zsh, filtering or stripping against the empty pattern,
+    // and the corpus uses `${(@)x:#}` to drop empty elements from an array.
+    // Requiring it made every one of those an error.
     expansion_pattern: $ => seq(
       field('name', $._expansion_variable_ref),
       choice(
-        seq($._hash_pattern, $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq($._double_hash_pattern, $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate('%'), $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate('%%'), $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate(':'), $._hash_pattern, $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate(':'), $._double_hash_pattern, $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate(':'), token.immediate('%'), $._pattern_suffix_start, field('pattern', $._param_pattern)),
-        seq(token.immediate(':'), token.immediate('%%'), $._pattern_suffix_start, field('pattern', $._param_pattern)),
+        seq($._hash_pattern, choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq($._double_hash_pattern, choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate('%'), choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate('%%'), choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate(':'), $._hash_pattern, choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate(':'), $._double_hash_pattern, choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate(':'), token.immediate('%'), choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
+        seq(token.immediate(':'), token.immediate('%%'), choice(seq($._pattern_suffix_start, field('pattern', $._param_pattern)), $._empty_pattern_suffix)),
         seq(token.immediate('//'), 
             $._pattern_start, 
             field('pattern', $._param_pattern_no_slash),

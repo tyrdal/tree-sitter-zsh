@@ -64,6 +64,7 @@ enum TokenType {
     BACKTICK,
     ARITH_WORD,
     ARITH_NUMBER,
+    EMPTY_PATTERN_SUFFIX,
     ERROR_RECOVERY,
 };
 
@@ -122,6 +123,7 @@ const char *TokenNames[] = {
     "BACKTICK",
     "ARITH_WORD",
     "ARITH_NUMBER",
+    "EMPTY_PATTERN_SUFFIX",
     "ERROR_RECOVERY",
 };
 #endif
@@ -1535,6 +1537,20 @@ static bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
             lexer->mark_end(lexer);
             return true;
         }
+    }
+
+    // <<<claude>>> `${m:#}`, `${m%%}` and `${m#}` are valid zsh: an empty
+    // pattern. PATTERN_SUFFIX_START refuses to fire when '}' comes next, so
+    // the grammar could never take the pattern branch for them. A separate
+    // zero-width token for exactly that case keeps the two readings apart in
+    // the lexer, where there is no ambiguity -- making the pattern
+    // `optional` instead left the parser free to drop a real pattern, and
+    // `${arr[@]:# }` lost its single-space pattern three attempts running.
+    if (valid_symbols[EMPTY_PATTERN_SUFFIX] && !in_error_recovery(valid_symbols) &&
+        get_current_context(scanner) == CTX_PARAMETER && lexer->lookahead == '}') {
+        lexer->mark_end(lexer);
+        lexer->result_symbol = EMPTY_PATTERN_SUFFIX;
+        return true;
     }
 
     // Handle PATTERN_SUFFIX_START - emitted after pattern operators in
